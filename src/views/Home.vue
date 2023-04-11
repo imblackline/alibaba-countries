@@ -1,0 +1,26 @@
+<template>
+    <div class="home">
+        <SmartTopBar />
+        <SmartCountryList />
+    </div>
+</template>
+
+<script>
+import SmartTopBar from "@/components/Smart/Home/SmartTopBar.vue";
+import SmartCountryList from "@/components/Smart/Home/SmartCountryList.vue";
+export default {
+    name: "Home",
+    components: {
+        SmartCountryList,
+        SmartTopBar,
+    },
+};
+</script>
+
+<style lang="scss" scoped>
+.home {
+  width: 100%;
+  height: 100%;
+  padding: 50px 60px;
+}
+</style>
