@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <SmartTopBar />
+        <SmartTopBar class="home__topbar"/>
         <SmartCountryList />
     </div>
 </template>
@@ -22,5 +22,8 @@ export default {
   width: 100%;
   height: 100%;
   padding: 50px 60px;
+  &__topbar{
+    margin-bottom: 40px;
+  }
 }
 </style>

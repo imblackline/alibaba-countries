@@ -47,6 +47,7 @@ export default {
     &__input {
         background-color: $darkmode-midnight;
         box-shadow: 0 0 3px rgba($primary-gray, 0.3);
+        color: $primary-white;
         &::placeholder {
             color: $primary-gray;
         }
