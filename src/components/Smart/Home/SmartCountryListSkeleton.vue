@@ -1,6 +1,6 @@
 <template>
     <div class="skeletonList">
-        <div class="skeletonList__card" v-for="i in 6" :key="i">
+        <div class="skeletonList__card" v-for="i in 10" :key="i">
             <div class="skeletonList__card__image"></div>
             <div class="skeletonList__card__info"></div>
         </div>
