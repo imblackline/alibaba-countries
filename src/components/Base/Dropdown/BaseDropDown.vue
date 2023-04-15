@@ -5,7 +5,7 @@
                 class="dropdown__select"
                 @click="isShowOptions = !isShowOptions"
             >
-                {{ selectedOption ? selectedOption.name : title }}
+                {{ selectedOption ? selectedOption : title }}
                 <span
                     class="material-icons-round dropdown__select__icon"
                     :class="{ 'dropdown__select__icon--show': isShowOptions }"
@@ -23,7 +23,7 @@
                     class="dropdown__options__option"
                     :class="{
                         'dropdown__options__option--selected':
-                            option === selectedOption,
+                            option.name === selectedOption,
                     }"
                     v-for="option in options"
                     :key="option"
@@ -39,24 +39,21 @@
 <script>
 import { ref } from "@vue/reactivity";
 export default {
-    props: ["title", "options"],
+    props: ["title", "options", "selectedOption"],
     emits: ["selectOption"],
-    setup(_, { emit }) {
-        const selectedOption = ref(undefined);
+    setup(props, { emit }) {
         const isShowOptions = ref(false);
         const selectOption = (option) => {
-            if (selectedOption.value === option) {
-                selectedOption.value = undefined;
+            if (props.selectedOption === option.name) {
                 emit("selectOption", undefined);
             } else {
-                selectedOption.value = option;
                 emit("selectOption", option);
             }
         };
         const closeOptions = () => {
             isShowOptions.value = false;
         };
-        return { selectedOption, selectOption, isShowOptions, closeOptions };
+        return { selectOption, isShowOptions, closeOptions };
     },
 };
 </script>
@@ -75,6 +72,7 @@ export default {
         padding: 18px 20px;
         cursor: pointer;
         font-size: 1rem;
+        user-select: none;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -87,6 +85,7 @@ export default {
         }
     }
     &__options {
+        user-select: none;
         position: absolute;
         width: 100%;
         margin-top: 5px;
@@ -131,11 +130,11 @@ export default {
     }
     &__options {
         background-color: $darkmode-midnight;
-        box-shadow: 0 0 7px $darkmode-dark-midnight ;
+        box-shadow: 0 0 7px $darkmode-dark-midnight;
         &__option {
             background-color: $darkmode-midnight;
             color: $primary-white;
-            &:hover{
+            &:hover {
                 background-color: rgba($mental-light, 0.1);
             }
             &--selected {

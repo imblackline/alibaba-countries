@@ -1,7 +1,7 @@
 <template>
     <div class="topbar">
         <SmartSearchBar />
-        <SmartFilter />
+        <SmartFilter class="topbar__filter"/>
     </div>
 </template>
 
@@ -22,5 +22,12 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @media (max-width: 750px) {
+        flex-direction: column;
+        align-items: flex-start;
+        &__filter{
+            margin-top: 30px;
+        }
+    }
 }
 </style>

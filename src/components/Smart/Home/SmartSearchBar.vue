@@ -4,15 +4,57 @@
             type="text"
             class="searchbar__input"
             placeholder="Search for a country..."
+            v-model="searchInput"
         />
         <span class="material-icons-round searchbar__icon"> search </span>
     </div>
 </template>
 
 <script>
+import { ref } from "@vue/reactivity";
+import { useRoute, useRouter } from "vue-router";
+import { computed, watch } from "@vue/runtime-core";
 export default {
     setup() {
-        return {};
+        const route = useRoute();
+        const router = useRouter();
+        const searchInput = ref();
+        const pathQuery = computed(() => route.query);
+        const searchQuery = computed(() => route.query.search);
+        watch(
+            searchQuery,
+            () => {
+                searchInput.value = searchQuery.value;
+            },
+            {
+                immediate: true,
+            },
+        );
+        watch(searchInput, () => {
+            if (
+                searchInput.value &&
+                searchInput.value !== " " &&
+                pathQuery.value.region
+            ) {
+                router.push(
+                    `/?search=${searchInput.value}&region=${pathQuery.value.region}`,
+                );
+            } else if (
+                searchInput.value &&
+                searchInput.value !== " " &&
+                !pathQuery.value.region
+            ) {
+                router.push(`/?search=${searchInput.value}`);
+            } else if (
+                (!searchInput.value || searchInput.value === " ") &&
+                pathQuery.value.region
+            ) {
+                router.push(`/?region=${pathQuery.value.region}`);
+            } else {
+                router.push(`/`);
+            }
+        });
+        return { searchQuery, searchInput };
     },
 };
 </script>
@@ -41,6 +83,12 @@ export default {
         margin: auto;
         transition: 0.3s;
         height: fit-content;
+    }
+    @media (max-width: 500px) {
+        width: 100%;
+        &__input{
+            width: 100%;
+        }
     }
 }
 :root.darkmode .searchbar {

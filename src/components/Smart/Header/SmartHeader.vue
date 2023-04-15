@@ -24,6 +24,10 @@ export default {
     align-items: center;
     justify-content: space-between;
     transition: 0.3s;
+    @media (max-width: 500px) {
+        padding: 15px 20px;
+        font-size: 0.85rem;
+    }
 }
 :root.darkmode .header {
     background-color: $darkmode-midnight;
