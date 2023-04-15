@@ -2,12 +2,12 @@
     <div class="countrycard">
         <img
             class="countrycard__image"
-            :src="countryInfo.flags.svg"
-            :alt="countryInfo.flags.alt"
+            :src="countryInfo.flags?.svg"
+            :alt="countryInfo.flags?.alt"
         />
         <div class="countrycard__info">
             <h3 class="countrycard__info__name">
-                {{ countryInfo.name.common }}
+                {{ countryInfo.name?.common }}
             </h3>
             <p>
                 Population:

@@ -1,18 +1,25 @@
 <template>
     <div class="home">
         <SmartTopBar class="home__topbar" />
-        <SmartCountryList />
+        <Suspense>
+            <SmartCountryList />
+            <template #fallback>
+                <SmartCountryListSkeleton />
+            </template>
+        </Suspense>
     </div>
 </template>
 
 <script>
 import SmartTopBar from "@/components/Smart/Home/SmartTopBar.vue";
 import SmartCountryList from "@/components/Smart/Home/SmartCountryList.vue";
+import SmartCountryListSkeleton from "@/components/Smart/Home/SmartCountryListSkeleton.vue";
 export default {
     name: "Home",
     components: {
         SmartCountryList,
         SmartTopBar,
+        SmartCountryListSkeleton,
     },
 };
 </script>

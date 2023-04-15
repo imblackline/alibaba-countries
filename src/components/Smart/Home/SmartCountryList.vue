@@ -27,13 +27,23 @@ import {
     watch,
 } from "@vue/runtime-core";
 import { useRouter, useRoute } from "vue-router";
+
+const loadData = async (axios) => {
+    return axios
+        .get(
+            "https://restcountries.com/v3.1/all?fields=name,capital,population,region,flags",
+        )
+        .then((res) => {
+            return res.data;
+        });
+};
 export default {
     components: { SmartCountryCard },
-    setup() {
+    async setup() {
         const axios = inject("axios");
         const router = useRouter();
         const route = useRoute();
-        const countries = ref([]);
+        const countries = ref(await loadData(axios));
 
         const handleScroll = () => {
             const { scrollTop, scrollHeight, clientHeight } =
@@ -41,36 +51,23 @@ export default {
             if (scrollTop + clientHeight >= scrollHeight - 5) {
             }
         };
-        onMounted(() => {
-            window.addEventListener("scroll", handleScroll);
-            axios
-                .get(
-                    "https://restcountries.com/v3.1/all?fields=name,capital,population,region,flags",
-                )
-                .then((res) => {
-                    countries.value = res.data;
-                })
-                .catch((err) => {});
-        });
-
-        onUnmounted(() => {
-            window.removeEventListener("scroll", handleScroll);
-        });
         const searchWord = (array, word) => {
             let wordArray = [...word.toLowerCase()];
             let filterArray = array.filter((item) => {
                 let itemName = item.name.common.toLowerCase();
                 for (let [charIndex, char] of wordArray.entries()) {
                     let index = itemName.indexOf(char);
-                    console.log(itemName,index,charIndex,wordArray.length);
+                    console.log(itemName, index, charIndex, wordArray.length);
                     if (charIndex + 1 === wordArray.length && index !== -1) {
-                        console.log(itemName,true);
+                        console.log(itemName, true);
                         return true;
                     } else if (charIndex !== wordArray.length && index !== -1) {
-                        console.log(itemName,"slice",char);
-                        itemName = itemName.slice(0, index) + itemName.slice(index+1);
+                        console.log(itemName, "slice", char);
+                        itemName =
+                            itemName.slice(0, index) +
+                            itemName.slice(index + 1);
                     } else {
-                        console.log(itemName,false);
+                        console.log(itemName, false);
                         return false;
                     }
                 }
@@ -95,40 +92,8 @@ export default {
             }
             if (searchQuery.value && regionQuery.value) {
                 filterArray = searchWord(filterArray, searchQuery.value);
-                
-                // filterArray = filterArray.filter(
-                //     (country) =>
-                //         country.name?.common
-                //             .toLowerCase()
-                //             .includes(searchQuery.value) ||
-                //         country.name?.official
-                //             .toLowerCase()
-                //             .includes(searchQuery.value) ||
-                //         country.name.eng?.common
-                //             .toLowerCase()
-                //             .includes(searchQuery.value) ||
-                //         country.name.eng?.official
-                //             .toLowerCase()
-                //             .includes(searchQuery.value),
-                // );
             } else if (searchQuery.value && !regionQuery.value) {
                 filterArray = searchWord(countries.value, searchQuery.value);
-
-                // filterArray = countries.value.filter(
-                //     (country) =>
-                //         country.name?.common
-                //             .toLowerCase()
-                //             .includes(searchQuery.value) ||
-                //         country.name?.official
-                //             .toLowerCase()
-                //             .includes(searchQuery.value) ||
-                //         country.name.eng?.common
-                //             .toLowerCase()
-                //             .includes(searchQuery.value) ||
-                //         country.name.eng?.official
-                //             .toLowerCase()
-                //             .includes(searchQuery.value),
-                // );
             }
             return filterArray;
         });
